@@ -52,10 +52,10 @@ export class AuthService {
 
   async login(loginDto: LoginDto) {
     const { email, password } = loginDto;
-    const user = await this.userRepository.findOneBy({ email });
+    const user = await this.userRepository.findOne({ where: { email: email } });
 
     if (user && (await bcrypt.compare(password, user.password))) {
-      const payload = { sub: user.id };
+      const payload = { email, sub: user.id };
       const accessToken = this.jwtService.sign(payload);
       return { accessToken };
     } else {
