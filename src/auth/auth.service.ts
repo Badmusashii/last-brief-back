@@ -2,18 +2,22 @@ import {
   ConflictException,
   Injectable,
   InternalServerErrorException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { CreateAuthDto } from './dto/create-auth.dto';
 import * as bcrypt from 'bcrypt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Users } from 'src/users/entities/user.entity';
 import { Repository } from 'typeorm';
+import { LoginDto } from './dto/login-auth.dto';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
   constructor(
     @InjectRepository(Users)
     private userRepository: Repository<Users>,
+    private jwtService: JwtService,
   ) {}
 
   async register(createAuthDto: CreateAuthDto) {
@@ -43,6 +47,21 @@ export class AuthService {
       } else {
         throw new InternalServerErrorException();
       }
+    }
+  }
+
+  async login(loginDto: LoginDto) {
+    const { email, password } = loginDto;
+    const user = await this.userRepository.findOneBy({ email });
+
+    if (user && (await bcrypt.compare(password, user.password))) {
+      const payload = { sub: user.id };
+      const accessToken = this.jwtService.sign(payload);
+      return { accessToken };
+    } else {
+      throw new UnauthorizedException(
+        'Ces identifiants ne sont pas bons, déso...',
+      );
     }
   }
 }
