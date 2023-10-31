@@ -33,3 +33,16 @@ INSERT INTO category (name) VALUES
 ('Jouets'),
 ('Outils'),
 ('Santé et Beauté');
+
+INSERT INTO product (name, price, quantity, category_id, users_id) VALUES
+('Hoverboard de Marty McFly', 999.99, 5, 1, 1),
+('Sonic Screwdriver', 49.99, 10, 5, 1),
+('Épée Laser Star Wars', 299.99, 7, 5, 1),
+('Dalek Aspirateur', 199.99, 8, 9, 1),
+('Time-Turner', 29.99, 20, 5, 1),
+('TARDIS Réfrigérateur', 499.99, 2, 6, 1),
+('Dispositif de Traduction Universelle', 119.99, 15, 1, 1),
+('Capsules de Capsule Corp.', 5.99, 100, 3, 1),
+('Wand de Harry Potter', 89.99, 12, 5, 1),
+('Plasma Rifle (Juste un modèle!)', 199.99, 5, 9, 1);
+

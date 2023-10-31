@@ -22,11 +22,11 @@ export class Product {
   @Column('int')
   quantity: number;
 
-  @ManyToOne(() => Users, (user) => user.products)
+  @ManyToOne(() => Users, (user) => user.products, { eager: true })
   @JoinColumn({ name: 'users_id' })
   user: Users;
 
-  @ManyToOne(() => Category, (category) => category.products)
+  @ManyToOne(() => Category, (category) => category.products, { eager: true })
   @JoinColumn({ name: 'category_id' })
   category: Category;
 }
