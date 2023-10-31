@@ -8,6 +8,7 @@ import {
   Delete,
   UseGuards,
   Request,
+  HttpCode,
 } from '@nestjs/common';
 import { ProductService } from './product.service';
 import { CreateProductDto } from './dto/create-product.dto';
@@ -19,6 +20,7 @@ export class ProductController {
   constructor(private readonly productService: ProductService) {}
 
   @Post()
+  @HttpCode(201)
   @UseGuards(AuthGuard('jwt'))
   create(@Request() req, @Body() createProductDto: CreateProductDto) {
     const user = req.user;
@@ -26,11 +28,13 @@ export class ProductController {
   }
 
   @Get()
+  @HttpCode(200)
   findAll() {
     return this.productService.findAll();
   }
 
   @Get(':id')
+  @HttpCode(200)
   @UseGuards(AuthGuard('jwt'))
   findOne(@Request() req, @Param('id') id: string) {
     const user = req.user;
@@ -38,12 +42,14 @@ export class ProductController {
   }
 
   @Patch(':id')
+  @HttpCode(204)
   @UseGuards(AuthGuard('jwt'))
   update(@Param('id') id: string, @Body() updateProductDto: UpdateProductDto) {
     return this.productService.update(+id, updateProductDto);
   }
 
   @Delete(':id')
+  @HttpCode(204)
   @UseGuards(AuthGuard('jwt'))
   remove(@Param('id') id: string) {
     return this.productService.remove(+id);

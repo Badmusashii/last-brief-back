@@ -2,6 +2,7 @@ import {
   ConflictException,
   Injectable,
   InternalServerErrorException,
+  Logger,
   UnauthorizedException,
 } from '@nestjs/common';
 import { CreateAuthDto } from './dto/create-auth.dto';
@@ -14,6 +15,8 @@ import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
+  private readonly journal = new Logger(AuthService.name);
+
   constructor(
     @InjectRepository(Users)
     private userRepository: Repository<Users>,
@@ -43,9 +46,15 @@ export class AuthService {
     } catch (error) {
       // gestion des erreurs
       if (error.code === '23505') {
-        throw new ConflictException('username already exists');
+        throw new ConflictException('Cet email existe déjà');
       } else {
-        throw new InternalServerErrorException();
+        this.journal.error(
+          `Échec de la création de l'utilisateur : ${error.message}`,
+        );
+
+        throw new InternalServerErrorException(
+          `Échec de la création de l'utilisateur : ${error.message}`,
+        );
       }
     }
   }
