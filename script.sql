@@ -19,7 +19,6 @@ CREATE TABLE product (
     price DECIMAL(10, 2) NOT NULL,
     quantity INTEGER NOT NULL,
     category_id INTEGER REFERENCES category(id),
-    users_id INTEGER REFERENCES users(id)
 );
 
 INSERT INTO category (name) VALUES

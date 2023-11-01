@@ -5,7 +5,7 @@ import {
   ManyToOne,
   JoinColumn,
 } from 'typeorm';
-import { Users } from 'src/users/entities/user.entity';
+
 import { Category } from 'src/category/entities/category.entity';
 
 @Entity('product')
@@ -21,10 +21,6 @@ export class Product {
 
   @Column('int')
   quantity: number;
-
-  @ManyToOne(() => Users, (user) => user.products, { eager: true })
-  @JoinColumn({ name: 'users_id' })
-  user: Users;
 
   @ManyToOne(() => Category, (category) => category.products, { eager: true })
   @JoinColumn({ name: 'category_id' })

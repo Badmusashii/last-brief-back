@@ -22,7 +22,7 @@ import { AuthModule } from './auth/auth.module';
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
       entities: [Users, Category, Product],
-      synchronize: false,
+      synchronize: true,
       dropSchema: false,
       logging: true,
     }),

@@ -36,9 +36,8 @@ export class ProductController {
   @Get(':id')
   @HttpCode(200)
   @UseGuards(AuthGuard('jwt'))
-  findOne(@Request() req, @Param('id') id: string) {
-    const user = req.user;
-    return this.productService.findOne(+id, user);
+  findOne(@Param('id') id: string) {
+    return this.productService.findOne(+id);
   }
 
   @Patch(':id')

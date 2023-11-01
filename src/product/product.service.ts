@@ -1,8 +1,4 @@
-import {
-  Injectable,
-  NotFoundException,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { Product } from './entities/product.entity';
@@ -16,8 +12,6 @@ export class ProductService {
   constructor(
     @InjectRepository(Product)
     private readonly productRepository: Repository<Product>,
-    @InjectRepository(Users)
-    private readonly userRepository: Repository<Users>,
 
     @InjectRepository(Category)
     private readonly categoryRepository: Repository<Category>,
@@ -26,9 +20,6 @@ export class ProductService {
     createProductDto: CreateProductDto,
     user: Users,
   ): Promise<Product> {
-    const newUser = await this.userRepository.findOne({
-      where: { id: user.id },
-    });
     if (!user) {
       throw new Error('User not found');
     }
@@ -39,7 +30,6 @@ export class ProductService {
       throw new Error('Category not found');
     }
     const newProduct = this.productRepository.create(createProductDto);
-    newProduct.user = newUser;
     newProduct.category = category;
 
     return await this.productRepository.save(newProduct);
@@ -49,17 +39,13 @@ export class ProductService {
     return await this.productRepository.find();
   }
 
-  async findOne(id: number, user: Users): Promise<Product> {
+  async findOne(id: number): Promise<Product> {
     const product = await this.productRepository.findOne({ where: { id: id } });
 
     if (!product) {
       throw new NotFoundException(`Produit avec l'id ${id} introuvable`);
     }
-    if (product.user.id !== user.id) {
-      throw new UnauthorizedException(
-        "Vous n'avez pas la permission de modifier ce produit !",
-      );
-    }
+
     return product;
   }
 

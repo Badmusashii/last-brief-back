@@ -1,6 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
-import { Product } from 'src/product/entities/product.entity';
-
+import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 @Entity('users') // Le nom de la table en base de données
 export class Users {
   @PrimaryGeneratedColumn()
@@ -17,8 +15,4 @@ export class Users {
 
   @Column({ length: 60 })
   password: string;
-
-  // Définir la relation One-to-Many avec la table Product
-  @OneToMany(() => Product, (product) => product.user) // Produit changé en Product et 'utilisateur' en 'user'
-  products: Product[]; // produits a été changé en products
 }
